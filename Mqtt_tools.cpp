@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Mqtt_tools.h"
-#include<wiringPi.h>
+//#include<wiringPi.h>
 //MQTTClient client;
 /*
 volatile MQTTClient_deliveryToken deliveredtoken;

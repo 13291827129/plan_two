@@ -20,7 +20,8 @@ using namespace std;
 #define QOS          1
 #define TIMEOUT      10000L
 #define USBSERIAL    "/dev/ttyUSB0"	
-#define TOPIC_FLAG   "state"       
+#define TOPIC_FLAG   "state"     
+#define original     0xffffffff
 char* const message1 = "thread1";
 char* const message2 = "thread2";
 char* const message3 = "thread3";
@@ -76,7 +77,7 @@ void*  Recive_And_Send(void *ptr)
 		{	
 			Json::Value value;
 			value["time"] = timebuf;
-			struct Exchange_data exchange_value = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+			struct Exchange_data exchange_value = {exchange_value.temperature = original,exchange_value.humidity = original,exchange_value.vibrate_x = original,exchange_value.vibrate_y = original,exchange_value.vibrate_z = original, exchange_value.pressure = original, exchange_value.electric = original, exchange_value.voice=original};
 			ret = Analyase_data(buf, length, &exchange_value, len);
 			printf("ret ==== %d\n",ret);
 			if(ret == -1)
@@ -84,33 +85,33 @@ void*  Recive_And_Send(void *ptr)
 				break;
 	//			continue; 
 			}
-			if(0 != strcmp("", exchange_value.macaddr))
+			if (0 != strcmp("", exchange_value.macaddr))
 			{		
 				value["id"] = exchange_value.macaddr;
 			}
-			if(exchange_value.temperature != NULL)
+			if (exchange_value.temperature != original)
 			{
 				value["temp"] = exchange_value.temperature;
 			}
-			if(exchange_value.humidity != NULL)
+			if (exchange_value.humidity != original)
 			{
 				value["hum"] = exchange_value.humidity;
 			}
-			if(exchange_value.vibrate_x != NULL|| exchange_value.vibrate_y != NULL|| exchange_value.vibrate_z != NULL)
+			if (exchange_value.vibrate_x != original|| exchange_value.vibrate_y != original|| exchange_value.vibrate_z != original)
 			{
 				value["xx"] = (signed char)exchange_value.vibrate_x;
 				value["yy"] = (signed char)exchange_value.vibrate_y;
 				value["zz"] = (signed char)exchange_value.vibrate_z;
 			}
-			if(exchange_value.pressure != NULL)
+			if(exchange_value.pressure != original)
 			{
 				value["pressure"] = exchange_value.pressure;
 			}
-			if(exchange_value.voice != NULL)
+			if(exchange_value.voice != original)
                         {
                                 value["voice"] = exchange_value.voice;
                         }	
-			if(exchange_value.electric != NULL)
+			if(exchange_value.electric != original)
                         {
                                 value["electric"] = exchange_value.electric;
                         }	

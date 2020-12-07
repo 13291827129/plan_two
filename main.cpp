@@ -77,7 +77,7 @@ void*  Recive_And_Send(void *ptr)
 		{	
 			Json::Value value;
 			value["time"] = timebuf;
-			struct Exchange_data exchange_value = {exchange_value.temperature = original,exchange_value.humidity = original,exchange_value.vibrate_x = original,exchange_value.vibrate_y = original,exchange_value.vibrate_z = original, exchange_value.pressure = original, exchange_value.electric = original, exchange_value.voice=original};
+			struct Exchange_data exchange_value = {exchange_value.temperature = original,exchange_value.humidity = original, exchange_value.vibrate_x = original, exchange_value.vibrate_y = original, exchange_value.vibrate_z = original, exchange_value.pressure = original, exchange_value.electric = original, exchange_value.voice = original};
 			ret = Analyase_data(buf, length, &exchange_value, len);
 			printf("ret ==== %d\n",ret);
 			if(ret == -1)

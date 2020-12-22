@@ -8,7 +8,7 @@
 #include<string.h>
 #include "Serialtools.h"
 //串口初始化
-int serial_init(char* DEV_NAME)
+int serial_init(const char* DEV_NAME)
 { 
 	int fd;
 	fd = open(DEV_NAME, O_RDWR);

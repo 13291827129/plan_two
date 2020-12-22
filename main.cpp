@@ -19,17 +19,17 @@ using namespace std;
 #define PAYLOAD      "sensor"
 #define QOS          1
 #define TIMEOUT      10000L
-#define USBSERIAL    "/dev/ttyUSB0"	
 #define TOPIC_FLAG   "state"     
 #define original     0xffffffff
-char* const message1 = "thread1";
-char* const message2 = "thread2";
-char* const message3 = "thread3";
-char* const message4 = "thread4";
-char* const message5 = "thread5";
-char* const message6 = "thread6";
-char* const message7 = "thread7";
-char* const message8 = "thread8";
+const char* message1 = "thread1";
+const char* message2 = "thread2";
+const char* message3 = "thread3";
+const char* message4 = "thread4";
+const char* message5 = "thread5";
+const char* message6 = "thread6";
+const char* message7 = "thread7";
+const char* message8 = "thread8";
+const char* USBSERIAL ="/dev/ttyUSB0";	
 int fd;
 char flag_buf[256] = {};
 int number = 1;

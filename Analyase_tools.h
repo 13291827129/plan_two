@@ -10,7 +10,7 @@ enum TYPE
 	//湿度
 	HUMIDITY    = 0x02,
 	//震动
-	VIBRATE     =  0X71,
+	VIBRATE     = 0X71,
 	//气压
 	PRESSURE    = 0x15,
 	//光线
@@ -23,14 +23,14 @@ enum TYPE
 struct Exchange_data
 { 	
 	char macaddr[256];
-	int temperature;
-	int humidity;
-	signed char vibrate_x;
-	signed char vibrate_y;
-	signed char vibrate_z;
-	float pressure;
-	int voice;
-	int electric;
+	signed int temperature = 0x8000;
+	signed int humidity = 0x8000;
+	signed char vibrate_x = 0x80;
+	signed char vibrate_y = 0x80;
+	signed char vibrate_z = 0x80;
+	float pressure = 0x8000;
+	int voice = 0x8000;
+	int electric = 0x8000;
 };
 int Analyase_data(char* data,int length,struct Exchange_data* exchange_value,int len);
 //返回数据长度

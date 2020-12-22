@@ -13,23 +13,20 @@
 #include<signal.h>
 #include<sys/time.h>
 using namespace std;
+#define TOPIC       "sensor"
+#define PAYLOAD     "sensor"
+#define QOS         1
+#define TIMEOUT     10000L
+#define TOPIC_FLAG  "state"    
 #define ADDRESS     "127.0.0.1:1883"
 #define CLIENTID    "ExampleClientSub"
-#define TOPIC        "sensor"
-#define PAYLOAD      "sensor"
-#define QOS          1
-#define TIMEOUT      10000L
-#define TOPIC_FLAG   "state"     
-#define original     0xffffffff
-const char* message1 = "thread1";
-const char* message2 = "thread2";
-const char* message3 = "thread3";
-const char* message4 = "thread4";
-const char* message5 = "thread5";
-const char* message6 = "thread6";
-const char* message7 = "thread7";
-const char* message8 = "thread8";
-const char* USBSERIAL ="/dev/ttyUSB0";	
+signed char flag_char = 0x80;
+signed int  flag = 0x8000;
+char  message1[10] = "thread1";
+char  message2[10] = "thread2";
+char  message3[10] = "thread3";
+char  message4[10] = "thread4";
+char  USBSERIAL[20] ="/dev/ttyUSB0";	
 int fd;
 char flag_buf[256] = {};
 int number = 1;
@@ -77,7 +74,7 @@ void*  Recive_And_Send(void *ptr)
 		{	
 			Json::Value value;
 			value["time"] = timebuf;
-			struct Exchange_data exchange_value = {exchange_value.temperature = original,exchange_value.humidity = original, exchange_value.vibrate_x = original, exchange_value.vibrate_y = original, exchange_value.vibrate_z = original, exchange_value.pressure = original, exchange_value.electric = original, exchange_value.voice = original};
+			struct Exchange_data exchange_value;
 			ret = Analyase_data(buf, length, &exchange_value, len);
 			printf("ret ==== %d\n",ret);
 			if(ret == -1)
@@ -89,29 +86,29 @@ void*  Recive_And_Send(void *ptr)
 			{		
 				value["id"] = exchange_value.macaddr;
 			}
-			if (exchange_value.temperature != original)
+			if (exchange_value.temperature != flag)
 			{
 				value["temp"] = exchange_value.temperature;
 			}
-			if (exchange_value.humidity != original)
+			if (exchange_value.humidity != flag)
 			{
 				value["hum"] = exchange_value.humidity;
 			}
-			if (exchange_value.vibrate_x != original|| exchange_value.vibrate_y != original|| exchange_value.vibrate_z != original)
+			if (exchange_value.vibrate_x != flag_char|| exchange_value.vibrate_y != flag_char|| exchange_value.vibrate_z != flag_char)
 			{
 				value["xx"] = (signed char)exchange_value.vibrate_x;
 				value["yy"] = (signed char)exchange_value.vibrate_y;
 				value["zz"] = (signed char)exchange_value.vibrate_z;
 			}
-			if(exchange_value.pressure != original)
+			if(exchange_value.pressure != flag)
 			{
 				value["pressure"] = exchange_value.pressure;
 			}
-			if(exchange_value.voice != original)
+			if(exchange_value.voice != flag)
                         {
                                 value["voice"] = exchange_value.voice;
                         }	
-			if(exchange_value.electric != original)
+			if(exchange_value.electric != flag)
                         {
                                 value["electric"] = exchange_value.electric;
                         }	
@@ -131,7 +128,7 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 	int state;
 	char  buf[10];
 	printf("Message arrived\n");
-    	printf("message: %s\n", message->payload);
+    	printf("message: %s\n", (char*)message->payload);
  //  	printf("   message: \n");
 	if (0 == strcmp("reversal",(char*) message->payload))
 	{
@@ -238,45 +235,6 @@ int main()
 	{
 	       printf("线程4创建成功\n");	
 	}
-	ret = pthread_create(&thread5, NULL, &Recive_And_Send, message5);
-	if (ret != 0)
-	{
-	       printf("线程5创建失败\n");	
-	}
-	else
-	{
-	       printf("线程5创建成功\n");	
-	}
-	
-	ret = pthread_create(&thread6, NULL, &Recive_And_Send, message6);
-	if (ret != 0)
-	{
-	       printf("线程6创建失败\n");	
-	}
-	else
-	{
-	       printf("线程6创建成功\n");	
-	}
-	ret = pthread_create(&thread7, NULL, &Recive_And_Send, message7);
-	if (ret != 0)
-	{
-	       printf("线程7创建失败\n");	
-	}
-	else
-	{
-	       printf("线程7创建成功\n");	
-	}
-	
-	ret = pthread_create(&thread8, NULL, &Recive_And_Send, message8);
-	if (ret != 0)
-	{
-	       printf("线程8创建失败\n");	
-	}
-	else
-	{
-	       printf("线程8创建成功\n");	
-	}
-
 	while(1);
 }	
 void sig_alarm_handle(int sig_num)
